@@ -12271,3 +12271,52 @@ class TablerIcons {
     "seeding_filled": seeding_filled,
   };
 }
+
+class TablerIcon extends StatelessWidget {
+  final IconData icon;
+  final double? size;
+  final Color? color;
+  final FontWeight? weight;
+
+  const TablerIcon(
+    this.icon, {
+    super.key,
+    this.size,
+    this.color,
+    this.weight,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final IconThemeData iconTheme = IconTheme.of(context);
+    final IconThemeData fallbackTheme = IconThemeData.fallback();
+    final double iconSize = size ?? iconTheme.size ?? fallbackTheme.size ?? 24.0;
+    final Color iconColor = color ?? iconTheme.color ?? fallbackTheme.color ?? const Color(0xFF000000);
+    
+    final double globalWeight = iconTheme.weight ?? 400;
+    FontWeight fontWeight = weight ?? FontWeight.values.firstWhere(
+      (fw) => fw.value == globalWeight.round(),
+      orElse: () => FontWeight.w400,
+    );
+
+    return SizedBox(
+      width: iconSize,
+      height: iconSize,
+      child: Center(
+        child: Text(
+          String.fromCharCode(icon.codePoint),
+          style: TextStyle(
+            inherit: false,
+            fontFamily: icon.fontFamily,
+            package: icon.fontPackage,
+            fontSize: iconSize,
+            color: iconColor,
+            fontWeight: fontWeight,
+            height: 1.0,
+            leadingDistribution: TextLeadingDistribution.even,
+          ),
+        ),
+      ),
+    );
+  }
+}

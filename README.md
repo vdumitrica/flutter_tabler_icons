@@ -33,19 +33,20 @@ Icon(TablerIcons.sparkles_filled)
 ```
 
 ### Stroke Widths
-This package supports customizable stroke widths (weights) for the outline icons. You can control the stroke width directly on the `Icon` widget. 
+This package supports customizable stroke widths (weights) for the outline icons! However, because standard Flutter `Icon` widgets do not support static font weights properly, you **must use the included `TablerIcon` widget instead of `Icon`** to use lighter weights.
 
 Supported weights:
-- `400` (Default, 2px stroke)
-- `300` (1.5px stroke)
-- `200` (1px stroke)
+- `FontWeight.w400` (Default, 2px stroke)
+- `FontWeight.w300` (1.5px stroke)
+- `FontWeight.w200` (1px stroke)
 
 ```Dart
 // A thinner icon
-Icon(TablerIcons.home_2, weight: 200)
+TablerIcon(TablerIcons.home_2, weight: FontWeight.w200)
 
 // You can also use IconTheme to apply it globally:
 // IconThemeData(weight: 200)
+// TablerIcon will automatically inherit from your Theme!
 ```
 
 ## Updating Icons
