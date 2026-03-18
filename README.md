@@ -31,8 +31,8 @@ class MyWidget extends StatelessWidget {
 This package can be updated to use a newer release of Tabler Icons with `tabler_gen.py` in `/util`. It takes the codepoints from the CSS file of the release and generates a Flutter class of all of the icons.
 
 Example:
-```
-> python .\util\tabler_gen.py -i .\assets\webfont\ -o .\lib\flutter_tabler_icons.dart -to .\assets\fonts\
+```bash
+python3 ./util/tabler_gen.py -i ./util/node_modules/@tabler/icons-webfont/dist -o ./lib/flutter_tabler_icons.dart -to ./assets/fonts/tabler-icons.ttf
 ```
 
 ![Screenshot of example app](https://github.com/bigbadbob2003/flutter_tabler_icons/raw/master/.github/screenshot_web.png)
