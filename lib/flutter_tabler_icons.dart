@@ -12322,7 +12322,9 @@ class TablerIcon extends StatelessWidget {
           style: TextStyle(
             inherit: false,
             fontFamily: resolvedFamily,
-            package: icon.fontPackage,
+            // Weight-specific families are registered at app-level (not package-level)
+            // so they must be looked up without a package scope.
+            package: resolvedFamily == icon.fontFamily ? icon.fontPackage : null,
             fontSize: iconSize,
             color: iconColor,
             height: 1.0,
