@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
             for rule in rules:
                 name_match = re.search(r"(?<=\.ti-).*?(?=:)", rule)
-                code_match = re.search(r'(?<=content: "\\\\).*?(?=";)', rule)
+                code_match = re.search(r'(?<=content: "\\).*(?=";)', rule)
 
                 if name_match and code_match:
                     name = name_match.group() + name_suffix
