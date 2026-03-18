@@ -1,3 +1,10 @@
+## [1.44.0] - 2026-03-18
+
+### Changed
+
+- Tabler icons updated to version v3.40.0
+- Updated repository and homepage to point to the new fork wrapper
+
 ## [1.43.0] - 2024-9-28
 
 ### Changed
