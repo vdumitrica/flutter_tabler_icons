@@ -1,6 +1,11 @@
-## [1.44.0] - 2026-03-18
+## [1.45.0] - 2026-03-18
 
-### Changed
+### Added
+
+- Support for Filled Icons via `_filled` suffixes (e.g., `TablerIcons.sparkles_filled`).
+- Support for customizable stroke widths using the `weight` property in the `Icon` widget (supports weights 200, 300, and 400).
+
+## [1.44.0] - 2026-03-18### Changed
 
 - Tabler icons updated to version v3.40.0
 - Updated repository and homepage to point to the new fork wrapper
