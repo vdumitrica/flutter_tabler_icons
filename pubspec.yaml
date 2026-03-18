@@ -19,3 +19,8 @@ flutter:
         - asset: assets/fonts/tabler-icons.ttf
           style: normal
           weight: 400
+    - family: tabler-icons-filled
+      fonts:
+        - asset: assets/fonts/tabler-icons-filled.ttf
+          style: normal
+          weight: 400

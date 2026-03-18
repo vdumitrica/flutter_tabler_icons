@@ -5,31 +5,8 @@ import os
 import re
 import shutil
 
-
-# def get_icon_locations(input: str):
-#     parser = tinycss.make_parser("page3")
-#     stylesheet = parser.parse_stylesheet(input)
-
-#     for rule in stylesheet.rules:
-#         for selector in rule.selector:
-#             if selector.value == "before":
-#                 icon_name = rule.selector[1].value
-#                 icon_location = rule.declarations[0].value[0].value
-
-#                 print(icon_name)
-#                 print(icon_location)
-#                 print(type(icon_location))
-#                 print(len(icon_location))
-
-# Converts the given string to camel case. This isn't a complete implementation,
-# and is only applicable for converting icon names.
-# https://www.geeksforgeeks.org/python-convert-snake-case-string-to-camel-case/
-
-
-# Generates a Flutter class from the given dict of names and code points.
-# Largely taken from
-# https://github.com/ScerIO/icon_font_generator/blob/master/lib/generate_flutter_class.dart
-def generate_flutter_class(name_code_point_dict: dict[str, str]) -> str:
+# Generates a Flutter class from the given list of icon definitions.
+def generate_flutter_class(icon_definitions: list[tuple[str, str, str]]) -> str:
     out = """library flutter_tabler_icons;
 
 import 'package:flutter/widgets.dart';
@@ -39,7 +16,6 @@ class TablerIcons {
 
 """
     # Some icons need their names changed to work with Dart variable naming.
-    # https://github.com/fluttercommunity/font_awesome_flutter/blob/5e8020d8bfce95568498e58b8d458c781ec50de1/util/lib/main.dart#L17
     name_adjustments = {
         "500px": "fiveHundredPx",
         "360-degrees": "threeHundredSixtyDegrees",
@@ -60,8 +36,9 @@ class TablerIcons {
 
     processed_icons = {}
 
-    for icon in name_code_point_dict:
-        name = icon.replace("-", "_")
+    for name, code_point, font_family in icon_definitions:
+        original_name = name
+        name = name.replace("-", "_")
 
         for name_adjustment in name_adjustments:
             if name.startswith(name_adjustment):
@@ -72,11 +49,9 @@ class TablerIcons {
         if name == "switch":
             name = "switch_"
 
-        processed_icons[name] = name_code_point_dict[icon]
+        processed_icons[name] = code_point
 
-        code_point = name_code_point_dict[icon]
-
-        out += f'    static const IconData {name} = IconData(0x{code_point}, fontFamily: "tabler-icons", fontPackage: "flutter_tabler_icons");\n'
+        out += f'    static const IconData {name} = IconData(0x{code_point}, fontFamily: "{font_family}", fontPackage: "flutter_tabler_icons");\n'
 
     out += "\n  static const all = <String, IconData> {\n"
 
@@ -86,7 +61,6 @@ class TablerIcons {
     out += "  };\n}\n"
 
     return out
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -108,36 +82,54 @@ if __name__ == "__main__":
     parser.add_argument(
         "-to",
         "--ttf-out",
-        help="Where to copy the TTF file",
+        help="Where to copy the TTF files (directory)",
         required=True,
     )
 
     args = parser.parse_args()
 
-    css_file_path = os.path.join(args.input, "tabler-icons.css")
+    # We will collect tuples of (name, code_point, font_family)
+    icon_definitions = []
 
-    name_code_point_dict = {}
+    def parse_css_file(filename, font_family, name_suffix=""):
+        css_file_path = os.path.join(args.input, filename)
+        if not os.path.exists(css_file_path):
+            print(f"Warning: {css_file_path} not found.")
+            return
 
-    # Parse the CSS to get the names and code points of all the icons.
-    # We could probably do this with a proper CSS parsing package, but the ones
-    # I tried (in both Dart and Python) were horrible to use.
-    with open(css_file_path, "r") as input_file:
-        css = input_file.read()
-        rules = re.findall(r".*:before {\s.*\s}", css)
+        with open(css_file_path, "r") as input_file:
+            css = input_file.read()
+            rules = re.findall(r".*:before {\s.*\s}", css)
 
-        for rule in rules:
-            name = re.search(r"(?<=\.ti-).*(?=:)", rule).group()
-            code_point = re.search(r'(?<=content: "\\).*(?=";)', rule).group()
+            for rule in rules:
+                name_match = re.search(r"(?<=\.ti-).*?(?=:)", rule)
+                code_match = re.search(r'(?<=content: "\\\\).*?(?=";)', rule)
 
-            #assert len(code_point) == 4
+                if name_match and code_match:
+                    name = name_match.group() + name_suffix
+                    code_point = code_match.group()
+                    icon_definitions.append((name, code_point, font_family))
 
-            name_code_point_dict[name] = code_point
+    # Parse regular outline icons
+    parse_css_file("tabler-icons.css", "tabler-icons")
+    
+    # Parse filled icons and append '_filled' to their dart variable name
+    parse_css_file("tabler-icons-filled.css", "tabler-icons-filled", name_suffix="-filled")
 
-    flutter_class = generate_flutter_class(name_code_point_dict)
+    flutter_class = generate_flutter_class(icon_definitions)
 
     with open(args.output, "w") as output_file:
         output_file.write(flutter_class)
 
-    ttf_file_path = os.path.join(args.input, "fonts", "tabler-icons.ttf")
+    # Ensure output font directory exists
+    os.makedirs(args.ttf_out, exist_ok=True)
 
-    shutil.copy(ttf_file_path, args.ttf_out)
+    # Copy regular font
+    ttf_file_path = os.path.join(args.input, "fonts", "tabler-icons.ttf")
+    if os.path.exists(ttf_file_path):
+        shutil.copy(ttf_file_path, os.path.join(args.ttf_out, "tabler-icons.ttf"))
+
+    # Copy filled font
+    filled_ttf_file_path = os.path.join(args.input, "fonts", "tabler-icons-filled.ttf")
+    if os.path.exists(filled_ttf_file_path):
+        shutil.copy(filled_ttf_file_path, os.path.join(args.ttf_out, "tabler-icons-filled.ttf"))
