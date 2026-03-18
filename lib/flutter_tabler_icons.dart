@@ -12289,15 +12289,29 @@ class TablerIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final IconThemeData iconTheme = IconTheme.of(context);
-    final IconThemeData fallbackTheme = IconThemeData.fallback();
-    final double iconSize = size ?? iconTheme.size ?? fallbackTheme.size ?? 24.0;
-    final Color iconColor = color ?? iconTheme.color ?? fallbackTheme.color ?? const Color(0xFF000000);
-    
-    final double globalWeight = iconTheme.weight ?? 400;
-    FontWeight fontWeight = weight ?? FontWeight.values.firstWhere(
-      (fw) => fw.value == globalWeight.round(),
+    final double iconSize = size ?? iconTheme.size ?? 24.0;
+    final Color iconColor = color ?? iconTheme.color ?? const Color(0xFF000000);
+
+    // Resolve effective weight from explicit arg or inherited IconTheme.
+    final double rawWeight = iconTheme.weight ?? 400;
+    final FontWeight resolvedWeight = weight ?? FontWeight.values.firstWhere(
+      (fw) => fw.value == rawWeight.round(),
       orElse: () => FontWeight.w400,
     );
+
+    // Explicitly select the correct font family for each weight.
+    // Flutter does NOT reliably select among static TTF files using fontWeight alone.
+    final String base = icon.fontFamily ?? 'tabler-icons';
+    final String resolvedFamily;
+    if (base == 'tabler-icons') {
+      resolvedFamily = resolvedWeight == FontWeight.w200
+          ? 'tabler-icons-200'
+          : resolvedWeight == FontWeight.w300
+              ? 'tabler-icons-300'
+              : 'tabler-icons';
+    } else {
+      resolvedFamily = base;
+    }
 
     return SizedBox(
       width: iconSize,
@@ -12307,11 +12321,10 @@ class TablerIcon extends StatelessWidget {
           String.fromCharCode(icon.codePoint),
           style: TextStyle(
             inherit: false,
-            fontFamily: icon.fontFamily,
+            fontFamily: resolvedFamily,
             package: icon.fontPackage,
             fontSize: iconSize,
             color: iconColor,
-            fontWeight: fontWeight,
             height: 1.0,
             leadingDistribution: TextLeadingDistribution.even,
           ),
