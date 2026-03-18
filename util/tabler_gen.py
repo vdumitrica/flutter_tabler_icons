@@ -124,12 +124,12 @@ if __name__ == "__main__":
     # Ensure output font directory exists
     os.makedirs(args.ttf_out, exist_ok=True)
 
-    # Copy regular font
-    ttf_file_path = os.path.join(args.input, "fonts", "tabler-icons.ttf")
-    if os.path.exists(ttf_file_path):
-        shutil.copy(ttf_file_path, os.path.join(args.ttf_out, "tabler-icons.ttf"))
+    def copy_font(font_name):
+        src = os.path.join(args.input, "fonts", font_name)
+        if os.path.exists(src):
+            shutil.copy(src, os.path.join(args.ttf_out, font_name))
 
-    # Copy filled font
-    filled_ttf_file_path = os.path.join(args.input, "fonts", "tabler-icons-filled.ttf")
-    if os.path.exists(filled_ttf_file_path):
-        shutil.copy(filled_ttf_file_path, os.path.join(args.ttf_out, "tabler-icons-filled.ttf"))
+    copy_font("tabler-icons.ttf")
+    copy_font("tabler-icons-200.ttf")
+    copy_font("tabler-icons-300.ttf")
+    copy_font("tabler-icons-filled.ttf")
