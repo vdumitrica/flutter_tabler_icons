@@ -51,7 +51,7 @@ class IconControls extends StatelessWidget {
             prefixIcon: const Icon(Icons.search, size: 20),
             isDense: true,
             filled: true,
-            fillColor: theme.colorScheme.surfaceContainerHighest,
+            fillColor: theme.colorScheme.primary.withOpacity(0.08),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,

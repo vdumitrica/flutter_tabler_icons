@@ -4,8 +4,9 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class DetailView extends StatelessWidget {
   final MapEntry<String, IconData> entry;
+  final VoidCallback? onClose;
 
-  const DetailView({super.key, required this.entry});
+  const DetailView({super.key, required this.entry, this.onClose});
 
   bool get _isOutline => entry.value.fontFamily == 'tabler-icons';
 
@@ -23,6 +24,7 @@ class DetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final surfaceTint = theme.colorScheme.primary.withOpacity(0.08);
     final labelStyle = theme.textTheme.labelSmall?.copyWith(
       color: theme.colorScheme.onSurface.withOpacity(0.5),
     );
@@ -34,6 +36,21 @@ class DetailView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Close button
+          if (onClose != null)
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                onPressed: onClose,
+                icon: const Icon(Icons.close, size: 18),
+                style: IconButton.styleFrom(
+                  foregroundColor: theme.colorScheme.onSurface.withOpacity(0.5),
+                ),
+                constraints: const BoxConstraints(),
+                padding: EdgeInsets.zero,
+              ),
+            ),
+
           // Large preview
           Center(
             child: TablerIcon(entry.value, size: 48, color: theme.colorScheme.onSurface),
@@ -65,7 +82,7 @@ class DetailView extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest,
+                  color: surfaceTint,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Row(

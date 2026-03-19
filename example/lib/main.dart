@@ -132,6 +132,7 @@ class _IconBrowserScreenState extends State<IconBrowserScreen> {
 
             if (isWide) {
               return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     width: 240,
@@ -148,10 +149,13 @@ class _IconBrowserScreenState extends State<IconBrowserScreen> {
                       width: 280,
                       child: IconTheme(
                         data: IconThemeData(
-                weight: _weight,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-                        child: DetailView(entry: _selectedIcon!),
+                          weight: _weight,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        child: DetailView(
+                          entry: _selectedIcon!,
+                          onClose: () => setState(() => _selectedIcon = null),
+                        ),
                       ),
                     ),
                   ],

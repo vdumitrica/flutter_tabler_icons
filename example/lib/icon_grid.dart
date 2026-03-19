@@ -19,6 +19,9 @@ class IconGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cellExtent = iconSize + 32;
+    final labelColor = theme.colorScheme.onSurface.withOpacity(0.5);
+    final selectedBg = theme.colorScheme.primary.withOpacity(0.15);
+    final selectedBorder = theme.colorScheme.primary.withOpacity(0.4);
 
     if (icons.isEmpty) {
       return Center(
@@ -34,50 +37,46 @@ class IconGrid extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth == 0) return const SizedBox.shrink();
       return GridView.builder(
-      padding: const EdgeInsets.all(12),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: cellExtent,
-        mainAxisSpacing: 4,
-        crossAxisSpacing: 4,
-      ),
-      itemCount: icons.length,
-      itemBuilder: (context, index) {
-        final entry = icons[index];
-        final isSelected = selectedIcon?.key == entry.key;
+        padding: const EdgeInsets.all(12),
+        addAutomaticKeepAlives: false,
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: cellExtent,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+        ),
+        itemCount: icons.length,
+        itemBuilder: (context, index) {
+          final entry = icons[index];
+          final isSelected = selectedIcon?.key == entry.key;
 
-        return GestureDetector(
-          onTap: () => onIconTap(entry),
-          child: Container(
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? theme.colorScheme.primary.withOpacity(0.15)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-              border: isSelected
-                  ? Border.all(color: theme.colorScheme.primary.withOpacity(0.4))
-                  : null,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TablerIcon(entry.value, size: iconSize),
-                const SizedBox(height: 4),
-                Text(
-                  entry.key.replaceAll('_', ' '),
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    fontSize: 8,
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+          return GestureDetector(
+            onTap: () => onIconTap(entry),
+            child: Container(
+              decoration: BoxDecoration(
+                color: isSelected ? selectedBg : Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+                border: isSelected
+                    ? Border.all(color: selectedBorder)
+                    : null,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TablerIcon(entry.value, size: iconSize),
+                  const SizedBox(height: 4),
+                  Text(
+                    entry.key.replaceAll('_', ' '),
+                    style: TextStyle(fontSize: 8, color: labelColor),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
     });
   }
 }
