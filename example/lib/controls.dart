@@ -99,6 +99,14 @@ class IconControls extends StatelessWidget {
             onIconSizeChanged(snapped);
           },
         ),
+        const SizedBox(height: 24),
+        Text(
+          'Icons by tabler.io',
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurface.withOpacity(0.3),
+            fontSize: 10,
+          ),
+        ),
       ],
     );
   }

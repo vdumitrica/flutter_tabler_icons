@@ -58,5 +58,6 @@ Example:
 python3 ./util/tabler_gen.py -i ./util/node_modules/@tabler/icons-webfont/dist -o ./lib/flutter_tabler_icons.dart -to ./assets/fonts/tabler-icons.ttf
 ```
 
-![Screenshot of example app](https://github.com/bigbadbob2003/flutter_tabler_icons/raw/master/.github/screenshot_web.png)
-![Screenshot of example app](https://github.com/bigbadbob2003/flutter_tabler_icons/raw/master/.github/screenshot.png)
+## Credits
+
+Icons by [Tabler Icons](https://tabler.io/icons) by [Paweł Kuna](https://github.com/codecalm), licensed under the [MIT License](https://github.com/tabler/tabler-icons/blob/main/LICENSE).
