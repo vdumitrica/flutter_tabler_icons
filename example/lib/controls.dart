@@ -61,18 +61,38 @@ class IconControls extends StatelessWidget {
           onChanged: onSearchChanged,
         ),
         const SizedBox(height: 12),
-        SegmentedButton<IconFilter>(
-          segments: const [
-            ButtonSegment(value: IconFilter.all, label: Text('All')),
-            ButtonSegment(value: IconFilter.outline, label: Text('Outline')),
-            ButtonSegment(value: IconFilter.filled, label: Text('Filled')),
+        Row(
+          children: [
+            for (final f in IconFilter.values)
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => onFilterChanged(f),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color: filter == f
+                          ? theme.colorScheme.primary.withOpacity(0.15)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: filter == f
+                            ? theme.colorScheme.primary.withOpacity(0.4)
+                            : theme.colorScheme.onSurface.withOpacity(0.15),
+                      ),
+                    ),
+                    child: Text(
+                      f.name[0].toUpperCase() + f.name.substring(1),
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: filter == f
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurface.withOpacity(0.6),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
           ],
-          selected: {filter},
-          onSelectionChanged: (s) => onFilterChanged(s.first),
-          style: ButtonStyle(
-            visualDensity: VisualDensity.compact,
-            textStyle: WidgetStatePropertyAll(theme.textTheme.labelMedium),
-          ),
         ),
         const SizedBox(height: 16),
         _SliderRow(
