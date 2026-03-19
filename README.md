@@ -18,8 +18,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class MyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
-    return new IconButton(
-      icon: new Icon(TablerIcons.alarm_smoke),
+    return IconButton(
+      icon: Icon(TablerIcons.alarm_smoke),
       onPressed: () { print('Alarm Smoke'); }
      );
   }
@@ -48,6 +48,27 @@ TablerIcon(TablerIcons.home_2, weight: FontWeight.w200)
 // IconThemeData(weight: 200)
 // TablerIcon will automatically inherit from your Theme!
 ```
+
+## Example App
+
+The example app is a responsive icon browser that showcases all package features:
+
+- **Search** — filter 6,000+ icons by name in real time
+- **Filter tabs** — switch between All, Outline, and Filled icons
+- **Stroke weight slider** — compare icons at w200, w300, and w400
+- **Size slider** — preview icons from 16px to 48px (4dp increments)
+- **Icon detail** — tap any icon to see weight comparison, size preview, usage code with copy-to-clipboard, and filled/outline counterpart
+- **Responsive layout** — controls on top with bottom sheet on phones, sidebar with detail panel on tablets and desktop
+
+### Mobile
+
+| Icon Grid | Icon Detail | Search |
+|-----------|-------------|--------|
+| ![Grid](.github/screenshot_mobile_grid.png) | ![Detail](.github/screenshot_mobile_detail.png) | ![Search](.github/screenshot_mobile_search.png) |
+
+### Desktop
+
+![Desktop](.github/screenshot_desktop.png)
 
 ## Updating Icons
 
