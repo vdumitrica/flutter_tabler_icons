@@ -31,7 +31,9 @@ class IconGrid extends StatelessWidget {
       );
     }
 
-    return GridView.builder(
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth == 0) return const SizedBox.shrink();
+      return GridView.builder(
       padding: const EdgeInsets.all(12),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: cellExtent,
@@ -76,5 +78,6 @@ class IconGrid extends StatelessWidget {
         );
       },
     );
+    });
   }
 }

@@ -80,7 +80,10 @@ class _IconBrowserScreenState extends State<IconBrowserScreen> {
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
         builder: (_) => IconTheme(
-          data: IconThemeData(weight: _weight),
+          data: IconThemeData(
+                weight: _weight,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
           child: DetailView(entry: _selectedIcon!),
         ),
       );
@@ -115,7 +118,10 @@ class _IconBrowserScreenState extends State<IconBrowserScreen> {
             final isWide = constraints.maxWidth >= 600;
 
             final grid = IconTheme(
-              data: IconThemeData(weight: _weight),
+              data: IconThemeData(
+                weight: _weight,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
               child: IconGrid(
                 icons: filtered,
                 iconSize: _iconSize,
@@ -141,7 +147,10 @@ class _IconBrowserScreenState extends State<IconBrowserScreen> {
                     SizedBox(
                       width: 280,
                       child: IconTheme(
-                        data: IconThemeData(weight: _weight),
+                        data: IconThemeData(
+                weight: _weight,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
                         child: DetailView(entry: _selectedIcon!),
                       ),
                     ),
