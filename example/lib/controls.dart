@@ -62,6 +62,7 @@ class IconControls extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Row(
+          spacing: 8,
           children: [
             for (final f in IconFilter.values)
               Expanded(
