@@ -12292,25 +12292,18 @@ class TablerIcon extends StatelessWidget {
     final double iconSize = size ?? iconTheme.size ?? 24.0;
     final Color iconColor = color ?? iconTheme.color ?? const Color(0xFF000000);
 
-    // Resolve effective weight from explicit arg or inherited IconTheme.
-    final double rawWeight = iconTheme.weight ?? 400;
-    final FontWeight resolvedWeight = weight ?? FontWeight.values.firstWhere(
-      (fw) => fw.value == rawWeight.round(),
-      orElse: () => FontWeight.w400,
-    );
-
-    // Explicitly select the correct font family for each weight.
-    // Flutter does NOT reliably select among static TTF files using fontWeight alone.
-    final String base = icon.fontFamily ?? 'tabler-icons';
-    final String resolvedFamily;
-    if (base == 'tabler-icons') {
-      resolvedFamily = resolvedWeight == FontWeight.w200
+    // Select the weight-specific font family. All families are bundled
+    // in this package — no app-level font registration needed.
+    final String family;
+    if (icon.fontFamily == 'tabler-icons') {
+      final double rawWeight = weight?.value.toDouble() ?? iconTheme.weight ?? 400;
+      family = rawWeight <= 250
           ? 'tabler-icons-200'
-          : resolvedWeight == FontWeight.w300
+          : rawWeight <= 350
               ? 'tabler-icons-300'
               : 'tabler-icons';
     } else {
-      resolvedFamily = base;
+      family = icon.fontFamily!;
     }
 
     return SizedBox(
@@ -12321,10 +12314,8 @@ class TablerIcon extends StatelessWidget {
           String.fromCharCode(icon.codePoint),
           style: TextStyle(
             inherit: false,
-            fontFamily: resolvedFamily,
-            // Weight-specific families are registered at app-level (not package-level)
-            // so they must be looked up without a package scope.
-            package: resolvedFamily == icon.fontFamily ? icon.fontPackage : null,
+            fontFamily: family,
+            package: 'flutter_tabler_icons',
             fontSize: iconSize,
             color: iconColor,
             height: 1.0,
