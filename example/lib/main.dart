@@ -140,7 +140,10 @@ class _IconBrowserScreenState extends State<IconBrowserScreen> {
                     const VerticalDivider(width: 1),
                     SizedBox(
                       width: 280,
-                      child: DetailView(entry: _selectedIcon!),
+                      child: IconTheme(
+                        data: IconThemeData(weight: _weight),
+                        child: DetailView(entry: _selectedIcon!),
+                      ),
                     ),
                   ],
                 ],
